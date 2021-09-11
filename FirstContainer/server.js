@@ -1,16 +1,19 @@
 "use strict"
 
 const express = require("express");
-
-// CONSTANTS
-const PORT = 8080;
-const HOST = "0.0.0.0";
-
-//App
+const http = require('http');
+const bodyParser = require('body-parser')
 const app = express();
+
+app.use(bodyParser.json())
+app.set("port", process.env.PORT || 3000);
+app.use(bodyParser.urlencoded({ extended: true, }));
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.json({
+        info: 'Esta es la primera aplicación a contenerizar'
+    })
 })
 
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+http.createServer(app).listen(app.get('port'), '0.0.0.0', () => {
+    console.log(`Running Express Server Listening on port ${app.get('port')}`)
+})
